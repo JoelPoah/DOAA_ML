@@ -2,6 +2,9 @@ from application import app
 from flask import render_template,request,flash
 from application import ai_model
 from application.forms import PredictionForm
+from application import db
+from application.models import Entry
+from datetime import datetime
 import logging
 import sys 
 #Handles http://127.0.0.1:5000/hello
