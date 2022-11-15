@@ -17,4 +17,5 @@ class Entry(db.Model):
     average_glucose_level = db.Column(db.Float, nullable=False)
     bmi = db.Column(db.Float, nullable=False)
     name = db.Column(db.String(100), nullable=False)
+    prediction = db.Column(db.Integer, nullable=False)
     predicted_on = db.Column(db.DateTime, nullable=False)
