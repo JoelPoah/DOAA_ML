@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import FloatField, SubmitField, StringField,RadioField
+from wtforms import FloatField, SubmitField, StringField,RadioField,IntegerField
 from wtforms.validators import Length, InputRequired, ValidationError,NumberRange
 class PredictionForm(FlaskForm):
     gender = RadioField('IsMale', choices=[(1,'male_1'),(0,'female_0')])
@@ -19,3 +19,16 @@ class PredictionForm(FlaskForm):
     average_glucose_level = FloatField("Average glucose level",validators=[InputRequired(), NumberRange(0,100)])
     bmi = FloatField("bmi",validators=[InputRequired(), NumberRange(0,100)])
     submit = SubmitField("Predict") 
+
+
+    
+
+class LoginForm(FlaskForm):
+    username = StringField("Username",validators=[InputRequired(),Length(min=1,max=30)])
+    password = StringField("Password",validators=[InputRequired(),Length(min=1,max=30)])
+    submit = SubmitField("Login")
+
+class RegisterForm(FlaskForm):
+    username = StringField("Username",validators=[InputRequired(),Length(min=1,max=30)])
+    password = StringField("Password",validators=[InputRequired(),Length(min=1,max=30)])
+    submit = SubmitField("Register")

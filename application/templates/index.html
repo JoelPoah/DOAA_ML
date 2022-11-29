@@ -88,8 +88,9 @@ data-ride="carousel"
 
 <div class="row d-flex justify-content-center">
   <!-- <div class="col-md-6 offset-md-3"> -->
-    <form name="frmPredict" action="/predict" method="post" novalidate>
+    <form name="frmPredict" action="/{{id}}/predict" method="post" novalidate>
         <fieldset>
+        {{ form.hidden_tag() }}
         {% for subfield in form.gender %}
         <tr>
           <td>{{ subfield }}</td>
@@ -203,6 +204,9 @@ data-ride="carousel"
           <span class="error-message">{{ error }}</span>
           {% endfor %}
         </p>
+        <p>
+          your id is {{id}}
+        </p>  
         <p>{{ form.submit(class_='form-control btn btn-primary' ) }}</p>
       </fieldset>
     </form>

@@ -1,21 +1,79 @@
 from application import app
 from flask import render_template,request,flash
 from application import ai_model
-from application.forms import PredictionForm
+from application.forms import PredictionForm, LoginForm, RegisterForm
 from application import db
-from application.models import Entry
+from application.models import Entry, User
 from datetime import datetime
 import logging
 import sys 
 #Handles http://127.0.0.1:5000/hello
-end_type = ['No Stroke you gonna live','You are gonna have  Stroke you gonna die']
+end_type = ['No Stroke you gonna live','You are gonna have Stroke you gonna die']
+
+@app.route('/registerpage', methods=['GET'])
+def registerpage():
+    rform1 = RegisterForm()
+    return render_template('register.html', form=rform1)
+def add_user(new_user):
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+        return new_user.id
+    except Exception as error:
+        db.session.rollback()
+        flash(error,"danger")
+
+@app.route('/register', methods=['GET','POST'])
+def register():
+    rform = RegisterForm()
+    if request.method == 'POST':
+        if rform.validate_on_submit():
+            user = rform.username.data
+            passw = rform.password.data
+            new_user = User(username=user, password=passw)
+            user_id = add_user(new_user)
+            if user_id:
+                flash('User Registered Successfully','success')
+                return render_template('register.html', form=rform)
+            else:
+                flash('User Registration Failed','danger')
+                return render_template('register.html', form=rform)
+        else:
+            flash(rform.errors)
+    return render_template('register.html', form=rform)
+
+
+
+@app.route('/login', methods=['GET'])
+def login_page():
+    lform = LoginForm()
+    return render_template('login.html',form=lform)
+
+@app.route('/login', methods=['POST'])
+def login():
+    lform = LoginForm()
+    if request.method == 'POST':
+        if lform.validate_on_submit():
+            user = lform.username.data
+            passw = lform.password.data
+            user = User.query.filter_by(username=user).first()
+            if user and user.password == passw:
+                flash('User Login Successfully','success')
+                return index_page(user.id)
+            else:
+                flash('User Login Failed','danger')
+                return render_template('login.html', form=lform)
+        else:
+            flash(lform.errors)
+    return render_template('login.html', form=lform)
+
+
 @app.route('/')
 @app.route('/index')
 @app.route('/home')
-def index_page():
-
+def index_page(id):
     form = PredictionForm()
-    return render_template('index.html',form=form, title='Stroke Prediction')
+    return render_template('index.html',form=form, title='Stroke Prediction', id=id)
 def add_entry(new_entry):
     try:
         db.session.add(new_entry)
@@ -24,38 +82,43 @@ def add_entry(new_entry):
     except Exception as error:
         db.session.rollback()
         flash(error,"danger")
-@app.route("/predict", methods=['GET','POST'])
-def predict():
-    print('please')
+@app.route("/<id>/predict", methods=['GET','POST'])
+def predict(id):
     form = PredictionForm()
-    # if request.method == 'POST':
-        # if form.validate_on_submit():
-    gender_male = form.gender.data
-    hypertension = form.hypertension.data
-    heartdisease = form.heartdisease.data
-    married = form.married.data
-    urban = form.urban.data
-    smoking = form.smoking.data
-    smokeformerly = form.smokeformerly.data
-    govtjob = form.govtjob.data
-    workedbefore = form.workedbefore.data
-    privatework = form.privatework.data
-    selfemployed = form.selfemployed.data
-    workchildren = form.workchildren.data
-    name = form.Name.data
-    age = form.age.data
-    average_glucose_level = form.average_glucose_level.data
-    bmi = form.bmi.data
-    X = [[gender_male,hypertension,heartdisease,married,urban,smokeformerly,smoking,govtjob,workedbefore,privatework,selfemployed,workchildren,age,average_glucose_level,bmi]]
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            gender_male = form.gender.data
+            hypertension = form.hypertension.data
+            heartdisease = form.heartdisease.data
+            married = form.married.data
+            urban = form.urban.data
+            smoking = form.smoking.data
+            smokeformerly = form.smokeformerly.data
+            govtjob = form.govtjob.data
+            workedbefore = form.workedbefore.data
+            privatework = form.privatework.data
+            selfemployed = form.selfemployed.data
+            workchildren = form.workchildren.data
+            name = form.Name.data
+            age = form.age.data
+            average_glucose_level = form.average_glucose_level.data
+            bmi = form.bmi.data
+            X = [[gender_male,hypertension,heartdisease,married,urban,smokeformerly,smoking,govtjob,workedbefore,privatework,selfemployed,workchildren,age,average_glucose_level,bmi]]
+            result = ai_model.predict(X)
+            print(result)
+            new_entry = Entry(user_id = id,gender_male=gender_male,hypertension=hypertension,heartdisease=heartdisease,married=married,urban=urban,smoking=smoking,smokeformerly=smokeformerly,govtjob=govtjob,workedbefore=workedbefore,privatework=privatework,selfemployed=selfemployed,workchildren=workchildren,age=age,average_glucose_level=average_glucose_level,bmi=bmi,prediction=int(result[0]),name=name,predicted_on=datetime.utcnow())
+            add_entry(new_entry)
+            flash(f"Prediction: {end_type[result[0]]}","success")
+            return render_template('index.html',form=form, title='Stroke Prediction')
+        else:
+            flash("Error, cannot proceed with prediction","danger")
+            return render_template("index.html", title="Enter Iris Parameters", form=form, index=True )
 
-    
-    result = ai_model.predict(X)
-    print(result)
-    new_entry = Entry(gender_male=gender_male,hypertension=hypertension,heartdisease=heartdisease,married=married,urban=urban,smoking=smoking,smokeformerly=smokeformerly,govtjob=govtjob,workedbefore=workedbefore,privatework=privatework,selfemployed=selfemployed,workchildren=workchildren,age=age,average_glucose_level=average_glucose_level,bmi=bmi,prediction=int(result[0]),name=name,predicted_on=datetime.utcnow())
-    add_entry(new_entry)
-    flash(f"Prediction: {end_type[result[0]]}","success")
-# else:
-#     flash("Error, cannot proceed with prediction","danger")
-    return render_template("index.html", title="Enter Iris Parameters", form=form, index=True )
+
+@app.route("/predictions")
+def predictions():
+    entries = Entry.query.all()
+    return render_template("predictions.html", title="Predictions", entries=entries, stroke_type=end_type)
+
 
 
