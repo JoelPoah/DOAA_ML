@@ -42,7 +42,7 @@ crossorigin="anonymous"
         <td>{{ stroke_type[entry.prediction] }}</td>
         <td>{{ entry.predicted_on.strftime("%d %b %y %H:%M")}}</td>
         <td>
-          <form name="frmRemoveEntry" action="/remove" method="post"novalidate>
+          <form name="frmRemoveEntry" action="/remove/{{id}}" method="post"novalidate>
             <input type="hidden" name="id" value="{{entry.id}}">
             <input value="Remove" type="submit" class="form-control btn-danger">
           </form>

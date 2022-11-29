@@ -81,6 +81,20 @@ def add_entry(new_entry):
     except Exception as error:
         db.session.rollback()
         flash(error,"danger")
+
+
+
+def remove_entry(id):
+    try:
+        entry = Entry.query.get(id) # version 2
+        # entry = db.get_or_404(Entry, id)
+        db.session.delete(entry)
+        db.session.commit()
+    except Exception as error:
+        db.session.rollback()
+        flash(error,"danger")
+        return 0
+
 @app.route("/<id>/predict", methods=['GET','POST'])
 def predict(id):
     form = PredictionForm()
@@ -114,10 +128,20 @@ def predict(id):
             return index_page(id)
 
 
+
+
 @app.route("/predictions/<id>", methods=['GET'])
 def predictions(id):
     entries = Entry.query.filter_by(user_id=id).all()
     return render_template("predictions.html", title="Predictions", entries=entries, stroke_type=end_type,id=id)
 
+
+@app.route('/remove/<userid>', methods=['POST'])
+def remove(userid):
+    form = PredictionForm()
+    req = request.form
+    id = req["id"]
+    remove_entry(id)
+    return predictions(userid)
 
 
