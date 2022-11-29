@@ -1,5 +1,5 @@
 from application import app
-from flask import render_template,request,flash
+from flask import render_template,request,flash, redirect, url_for 
 from application import ai_model
 from application.forms import PredictionForm, LoginForm, RegisterForm
 from application import db
@@ -44,7 +44,7 @@ def register():
 
 
 
-@app.route('/login', methods=['GET'])
+@app.route('/', methods=['GET'])
 def login_page():
     lform = LoginForm()
     return render_template('login.html',form=lform)
@@ -68,9 +68,8 @@ def login():
     return render_template('login.html', form=lform)
 
 
-@app.route('/')
-@app.route('/index')
-@app.route('/home')
+
+@app.route('/home/<id>', methods=['GET'])
 def index_page(id):
     form = PredictionForm()
     return render_template('index.html',form=form, title='Stroke Prediction', id=id)
@@ -109,16 +108,16 @@ def predict(id):
             new_entry = Entry(user_id = id,gender_male=gender_male,hypertension=hypertension,heartdisease=heartdisease,married=married,urban=urban,smoking=smoking,smokeformerly=smokeformerly,govtjob=govtjob,workedbefore=workedbefore,privatework=privatework,selfemployed=selfemployed,workchildren=workchildren,age=age,average_glucose_level=average_glucose_level,bmi=bmi,prediction=int(result[0]),name=name,predicted_on=datetime.utcnow())
             add_entry(new_entry)
             flash(f"Prediction: {end_type[result[0]]}","success")
-            return render_template('index.html',form=form, title='Stroke Prediction')
+            return index_page(id)
         else:
-            flash("Error, cannot proceed with prediction","danger")
-            return render_template("index.html", title="Enter Iris Parameters", form=form, index=True )
+            flash("Error, cannot proceed with prediction all input is required","danger")
+            return index_page(id)
 
 
-@app.route("/predictions")
-def predictions():
-    entries = Entry.query.all()
-    return render_template("predictions.html", title="Predictions", entries=entries, stroke_type=end_type)
+@app.route("/predictions/<id>", methods=['GET'])
+def predictions(id):
+    entries = Entry.query.filter_by(user_id=id).all()
+    return render_template("predictions.html", title="Predictions", entries=entries, stroke_type=end_type,id=id)
 
 
 

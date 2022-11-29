@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import FloatField, SubmitField, StringField,RadioField,IntegerField
 from wtforms.validators import Length, InputRequired, ValidationError,NumberRange
 class PredictionForm(FlaskForm):
-    gender = RadioField('IsMale', choices=[(1,'male_1'),(0,'female_0')])
+    gender = RadioField('IsMale',validators=[InputRequired()], choices=[(1,'male_1'),(0,'female_0')])
     hypertension = RadioField('hypertension', choices=[(1,'hypertension_yes_1'),(0,'hypertension_no_0')])
     heartdisease = RadioField('Isheartdisease', choices=[(1,'heart_disease_yes_1'),(0,'heart_disease_no_0')])
     married = RadioField('Ismarried', choices=[(1,'married_1'),(0,'not_married_0')])
