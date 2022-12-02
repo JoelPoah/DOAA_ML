@@ -16,7 +16,7 @@ class PredictionForm(FlaskForm):
     workchildren = RadioField('Isworkchildren', choices=[(1,'work_w_children_1'),(0,'not_working_w_children_0')])
     Name = StringField("Name",validators=[InputRequired(),Length(min=1,max=30)])
     age = FloatField("Age",validators=[InputRequired(), NumberRange(0,1000)])
-    average_glucose_level = FloatField("Average glucose level",validators=[InputRequired(), NumberRange(0,100)])
+    average_glucose_level = FloatField("Average glucose level",validators=[InputRequired(), NumberRange(0,300)])
     bmi = FloatField("bmi",validators=[InputRequired(), NumberRange(0,100)])
     submit = SubmitField("Predict") 
 

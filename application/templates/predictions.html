@@ -24,6 +24,10 @@ src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 crossorigin="anonymous"
 ></script>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/predictions.css') }}"
+/>
 <table class="table table-striped">
     <thead>
       <tr>
@@ -51,4 +55,34 @@ crossorigin="anonymous"
       {% endfor %}
     </tbody>
   </table>
+
+  <div>
+    <canvas id="myChart"></canvas>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Stroke','No Stroke'],
+        datasets: [{
+          label: 'Summary of stroke predictions in this account',
+          backgroundColor: ['red','green'],
+          data: [{{summary_1 | safe}},{{summary_0 | safe}}],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+  
 {% endblock %}

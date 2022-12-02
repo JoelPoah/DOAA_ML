@@ -24,6 +24,10 @@ src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 crossorigin="anonymous"
 ></script>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/predictions.css') }}"
+/>
 <div
 id="carouselExampleIndicators"
 class="carousel slide"
@@ -89,8 +93,9 @@ data-ride="carousel"
 <div class="row d-flex justify-content-center">
   <!-- <div class="col-md-6 offset-md-3"> -->
     <form name="frmPredict" action="/{{id}}/predict" method="post" novalidate>
-        <fieldset>
+        <br>
         {{ form.hidden_tag() }}
+        <label class="text-warning bg-dark"> Are you a male or female? </label><br>
         {% for subfield in form.gender %}
         <tr>
           <td>{{ subfield }}</td>
@@ -98,6 +103,7 @@ data-ride="carousel"
         </tr>
         {% endfor %}
     </br>
+        <label class="text-warning bg-dark"> Do you have hypertension?</label></br>
         {% for subfield in form.hypertension %}
         <tr>
           <td>{{ subfield }}</td>
@@ -105,6 +111,7 @@ data-ride="carousel"
         </tr>
         {% endfor %}
     </br>
+        <label class="text-warning bg-dark"> Do you have heart disease?</label></br>
         {% for subfield in form.heartdisease %}
         <tr>
           <td>{{ subfield }}</td>
@@ -112,6 +119,7 @@ data-ride="carousel"
         </tr>
         {% endfor %}
     </br>
+        <label class="text-warning bg-dark"> Have you ever been married?</label></br>
         {% for subfield in form.married %}
         <tr>
           <td>{{ subfield }}</td>
@@ -119,6 +127,7 @@ data-ride="carousel"
         </tr>
         {% endfor %}
     </br>
+        <label class="text-warning bg-dark"> Do you live in a urban or rural area?</label></br>
         {% for subfield in form.urban %}
         <tr>
           <td>{{ subfield }}</td>
@@ -126,6 +135,7 @@ data-ride="carousel"
         </tr>
         {% endfor %}
     </br>
+        <label class="text-warning bg-dark"> Are you currently smoking?</label></br>
         {% for subfield in form.smoking %}
         <tr>
           <td>{{ subfield }}</td>
@@ -133,6 +143,7 @@ data-ride="carousel"
         </tr>
         {% endfor %}
     </br>
+        <label class="text-warning bg-dark"> Do you have a history of smoking?</label></br>
         {% for subfield in form.smokeformerly %}
         <tr>
           <td>{{ subfield }}</td>
@@ -140,6 +151,7 @@ data-ride="carousel"
         </tr>
         {% endfor %}
     </br>
+        <label class="text-warning bg-dark"> Are you working in a government job?</label></br>
         {% for subfield in form.govtjob %}
         <tr>
           <td>{{ subfield }}</td>
@@ -147,6 +159,7 @@ data-ride="carousel"
         </tr>
         {% endfor %}
     </br>
+        <label class="text-warning bg-dark"> Have you worked before?</label></br>
         {% for subfield in form.workedbefore %}
         <tr>
           <td>{{ subfield }}</td>
@@ -154,6 +167,7 @@ data-ride="carousel"
         </tr>
         {% endfor %}
     </br>
+        <label class="text-warning bg-dark"> Is your job considered private?</label></br>
         {% for subfield in form.privatework %}
         <tr>
           <td>{{ subfield }}</td>
@@ -161,6 +175,7 @@ data-ride="carousel"
         </tr>
         {% endfor %}
     </br>
+        <label class="text-warning bg-dark"> Are you self employed?</label></br>
         {% for subfield in form.selfemployed %}
         <tr>
           <td>{{ subfield }}</td>
@@ -168,6 +183,7 @@ data-ride="carousel"
         </tr>
         {% endfor %}
     </br>
+        <label class="text-warning bg-dark"> Does your job involve working with children?</label></br>
         {% for subfield in form.workchildren %}
         <tr>
           <td>{{ subfield }}</td>
@@ -175,7 +191,6 @@ data-ride="carousel"
         </tr>
         {% endfor %}
     </br>
-
         <p>
           {{ form.Name.label }}<br />
           {{ form.Name(class_='form-control') }} {% for error in

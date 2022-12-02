@@ -7,7 +7,7 @@ max-width: 100%;
 overflow-x: hidden;
 position: relative;
 margin:auto;
-background-color: #3d5b74;
+background-color: #99b6c8;
 
 
 }
@@ -15,6 +15,7 @@ background-color: #3d5b74;
 .nav{
 display: flex;
 justify-content: flex-end;
+background-color: aquamarine;
 }
 
 .nav-item {

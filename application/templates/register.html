@@ -25,9 +25,13 @@ src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 crossorigin="anonymous"
 ></script>
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/main.css') }}"
+/>
 <form name="frmRegister" action="/register" method="POST" novalidate>
     <fieldset>
-        <legend>Register</legend>
+        <legend class = "text-center">Register</legend>
         {{ form.hidden_tag() }}
         <p>
             {{ form.username.label }}<br />
@@ -41,10 +45,11 @@ crossorigin="anonymous"
             <span class="error-message">{{ error }}</span>
             {% endfor %}
         </p>
-        <p>
-        {{ form.submit(class_='btn btn-primary') }}
-        </p>
-    
+        <div class ='d-grid gap-2'>
+            <!-- increase width of button -->
+            
+          <p class="text-center">{{ form.submit(class_='btn btn-lg btn-primary',style_='width:100%' ) }}</p>
+          </div>
     </fieldset>  
 </form>
 

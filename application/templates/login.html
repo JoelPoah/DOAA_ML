@@ -1,51 +1,59 @@
-
-<!-- Inherits from layout.html -->
-{% extends "layout.html" %}
-<!-- The block content replace the one encapsulated in layout.html -->
 {% block content %}
 <link
-rel="stylesheet"
-href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-crossorigin="anonymous"
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+  crossorigin="anonymous"
 />
 
 <script
-src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-crossorigin="anonymous"
+  src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+  crossorigin="anonymous"
 ></script>
 <script
-src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-crossorigin="anonymous"
+  src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+  integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+  crossorigin="anonymous"
 ></script>
 <script
-src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-crossorigin="anonymous"
+  src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+  integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+  crossorigin="anonymous"
 ></script>
-<form name="frmRegister" action="/login" method="POST" novalidate>
+<!-- link to main css -->
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/main.css') }}"
+/>
+
+<div class="container">
+  <form name="frmRegister" action="/login" method="POST" novalidate>
     <fieldset>
-        <legend>Login</legend>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br />
-            {{ form.username(class_='form-control') }} {% for error in form.username.errors %}
-            <span class="error-message">{{ error }}</span>
-            {% endfor %}
+      <legend class= 'text-center'>Login</legend>
+      {{ form.hidden_tag() }}
+      <p>
+        {{ form.username.label }}<br />
+        {{ form.username(class_='form-control') }} {% for error in
+        form.username.errors %}
+        <span class="error-message">{{ error }}</span>
+        {% endfor %}
+      </p>
+
+      <p>
+        {{ form.password.label }}<br />
+        {{ form.password(class_='form-control',type='password') }} {% for error
+        in form.password.errors %} {{ error }}
+        <span class="error-message">{{ error }}</span>
+        {% endfor %}
+      </p>
+      <div class ='d-grid gap-2'>
+        <!-- increase width of button -->
         
-        <p>
-            {{ form.password.label }}<br />
-            {{ form.password(class_='form-control') }} {% for error in form.password.errors %} {{ error }} 
-            <span class="error-message">{{ error }}</span>
-            {% endfor %}
-        </p>
-        <p>
-        {{ form.submit(class_='btn btn-primary') }}
-        </p>
-    
-    </fieldset>  
-</form>
+      <p class="text-center">{{ form.submit(class_='btn btn-lg btn-primary',style_='width:100%' ) }}</p>
+      </div>
+    </fieldset>
+  </form>
+</div>
 
 {% endblock %}
