@@ -33,6 +33,9 @@ crossorigin="anonymous"
       <tr>
         <th>Name</th>
         <th>Age</th>
+        <th>Gender</th>
+        <th>Heart disease</th>
+        <th>Hypertension</th>
         <th>Prediction</th>
         <th>Timestamp</th>
         <th>Delete</th>
@@ -43,6 +46,10 @@ crossorigin="anonymous"
         <tr>
         <td>{{ entry.name}}</td>
         <td>{{ entry.age }}</td>
+        <td>{{gender[entry.gender]}}</td>
+        <td>{{heartdisease[entry.heartdisease]}}</td>
+        <td>{{hypertension[entry.hypertension]}}</td>
+
         <td>{{ stroke_type[entry.prediction] }}</td>
         <td>{{ entry.predicted_on.strftime("%d %b %y %H:%M")}}</td>
         <td>
@@ -84,5 +91,34 @@ crossorigin="anonymous"
       }
     });
   </script>
+
+<!-- scatter chart of age -->
+  <div>
+    <canvas id="myChart2"></canvas>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    
+    const ctx2 = document.getElementById('myChart2');
+    
+    new Chart(ctx2, {
+      type: 'scatter',
+      data: {
+        labels: ['Age'],
+        datasets: [{
+          label: 'Glucose vs Bmi',
+          backgroundColor: 'rgb(255, 99, 132)',
+          data: {{data_scatter | safe}},
+          borderWidth: 1
+        }]
+      }
+    });
+  </script>
+  
+
+  
+
   
 {% endblock %}

@@ -10,6 +10,7 @@ import sys
 #Handles http://127.0.0.1:5000/hello
 end_type = ['No Stroke you gonna live','You are gonna have Stroke you gonna die']
 
+logged_in = False
 @app.route('/registerpage', methods=['GET'])
 def registerpage():
     rform1 = RegisterForm()
@@ -58,8 +59,10 @@ def login():
             passw = lform.password.data
             user = User.query.filter_by(username=user).first()
             if user and user.password == passw:
+                global logged_in
+                logged_in = True
                 flash('User Login Successfully','success')
-                return index_page(user.id)
+                return (index_page(user.id))
             else:
                 flash('User Login Failed','danger')
                 return render_template('login.html', form=lform)
@@ -71,8 +74,11 @@ def login():
 
 @app.route('/home/<id>', methods=['GET'])
 def index_page(id):
-    form = PredictionForm()
-    return render_template('index.html',form=form, title='Stroke Prediction', id=id)
+    if logged_in:
+        form = PredictionForm()
+        return render_template('index.html',form=form, title='Stroke Prediction', id=id)
+    else:
+        return redirect(url_for('login_page'))
 def add_entry(new_entry):
     try:
         db.session.add(new_entry)
@@ -133,10 +139,19 @@ def predict(id):
 
 @app.route("/predictions/<id>", methods=['GET'])
 def predictions(id):
-    entries = Entry.query.filter_by(user_id=id).all()
-    summary_1 = Entry.query.filter_by(user_id=id, prediction=1).count()
-    summary_0 = Entry.query.filter_by(user_id=id, prediction=0).count()
-    return render_template("predictions.html", title="Predictions", entries=entries, stroke_type=end_type,id=id, summary_0=summary_0, summary_1=summary_1)
+    if logged_in:
+        gender = ['female',',male']
+        hypertension = ['No','Yes']
+        heartdisease = ['No','Yes']
+        entries = Entry.query.filter_by(user_id=id).all()
+        summary_1 = Entry.query.filter_by(user_id=id, prediction=1).count()
+        summary_0 = Entry.query.filter_by(user_id=id, prediction=0).count()
+        data_scatter = []
+        for entry in entries:
+            data_scatter.append({'x':entry.average_glucose_level,'y':entry.bmi})
+        return render_template("predictions.html", title="Predictions", entries=entries, stroke_type=end_type,id=id, summary_0=summary_0, summary_1=summary_1,gender=gender,hypertension=hypertension,heartdisease=heartdisease,data_scatter=data_scatter)
+    else:
+        return redirect(url_for('login_page'))
 
 
 @app.route('/remove/<userid>', methods=['POST'])
@@ -149,6 +164,8 @@ def remove(userid):
 
 @app.route('/logout')
 def logout():
+    global logged_in
+    logged_in = False
     return redirect(url_for('login_page'))
 
 
